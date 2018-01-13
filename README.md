@@ -7,3 +7,8 @@ Key features:
   - Location of lunch
   - Input name
   - Sexy UI
+
+How:
+  - Heroku Deployment
+  - Node/Express
+ 

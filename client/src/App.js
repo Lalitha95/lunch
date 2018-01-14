@@ -25,7 +25,8 @@ class App extends Component {
         {/* Render the passwords if we have them */}
         {passwords.length ? (
           <div>
-            <h1>5 Passwords.</h1>
+            <h1>Lunch?</h1>
+            <h2>Here's who's coming:</h2>
             <ul className="passwords">
               {/*
                 Generally it's bad to use "index" as a key.

@@ -3,63 +3,79 @@ import './App.css';
 
 class App extends Component {
   // Initialize state
-  state = { passwords: [] }
+  state = { namesList: [] }
 
-  // Fetch passwords after first mount
+  // Fetch names list after first mount
   componentDidMount() {
-    this.getPasswords();
+    this.getNamesList();
   }
 
-  getPasswords = () => {
-    // Get the passwords and store them in state
-    fetch('/api/passwords')
-      .then(res => res.json())
-      .then(passwords => this.setState({ passwords }));
+  getNamesList = () => {
+    // Get the names list and store them in state
+    fetch('/api/displayNames')
+    .then(res => res.json())
+    .then(namesList => this.setState({ namesList }));
+  }
+
+  addNameToList = () => {
+    fetch(`/names/${this.state.newName}`);
+    this.getNamesList();
+    this.setState({newName: ''});
+  }
+
+  handleChange(event) {
+    this.setState({newName: event.target.value})
   }
 
   render() {
-    const { passwords } = this.state;
+    const { namesList } = this.state;
 
     return (
       <div className="App">
-        {/* Render the passwords if we have them */}
-        {passwords.length ? (
-          <div>
-            <h1>Lunch?</h1>
-            <h2>Here's who's coming:</h2>
-            <ul className="passwords">
-              {/*
-                Generally it's bad to use "index" as a key.
-                It's ok for this example because there will always
-                be the same number of passwords, and they never
-                change positions in the array.
-              */}
-              {passwords.map((password, index) =>
+      {/* Render the names list if we have them */}
+      {namesList.length ? (
+        <div>
+          <h1>Lunch?</h1>
+          <h2>Here's who's coming:</h2>
+          <ul className="namesList">
+              {namesList.map((password, index) =>
                 <li key={index}>
-                  {password}
+                {password}
                 </li>
               )}
             </ul>
+            <p>
+            <label>
+              Your name?  :
+              <input type="text" name="name" value={this.state.newName} onChange={this.handleChange.bind(this)}/>
+            </label>
+            </p>
             <button
               className="more"
-              onClick={this.getPasswords}>
-              Get More
+              onClick={this.addNameToList}>
+              Add me!
             </button>
           </div>
         ) : (
           // Render a helpful message otherwise
           <div>
-            <h1>No passwords :(</h1>
+            <h1>No one coming yet :(</h1>
+            <p>
+            <label>
+              Your name?  :
+              <input type="text" name="name" value={this.state.newName} onChange={this.handleChange.bind(this)}/>
+            </label>
+            </p>
             <button
               className="more"
-              onClick={this.getPasswords}>
-              Try Again?
+              onClick={this.addNameToList}>
+              Add me!
             </button>
           </div>
-        )}
-      </div>
-    );
-  }
-}
+          )}
+        </div>
+        );
+      }
+    }
 
-export default App;
+    export default App;

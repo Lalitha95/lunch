@@ -18,9 +18,9 @@ class App extends Component {
   }
 
   addNameToList = () => {
-    fetch(`/names/${this.state.newName}`);
-    this.getNamesList();
-    this.setState({newName: ''});
+    fetch(`/names/${this.state.newName}`)
+    .then(this.getNamesList())
+    .then(this.setState({newName: ''}));
   }
 
   handleChange(event) {

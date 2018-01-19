@@ -4,7 +4,8 @@
   "description": "Basic lunch meeting organiser.",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "body-parser": "^1.18.2"
   },
   "scripts": {
     "start": "node index.js"

@@ -4,11 +4,15 @@ import Map from './Map'
 import SearchBar from './SearchBar'
 class App extends Component {
   // Initialize state
-  state = { namesList: [] }
+
+  state = { namesList: [] , newName: '', location_name: '', location_lat: '', location_lng: ''}
 
   // Fetch names list after first mount
   componentDidMount() {
     this.getNamesList();
+    this.getLocation();
+    //this.getLocationLat();
+    //this.getLocationLng();
   }
 
   getNamesList = () => {
@@ -17,6 +21,24 @@ class App extends Component {
     .then(res => res.json())
     .then(namesList => this.setState({ namesList }));
   }
+
+  getLocation = () => {
+    fetch('api/displayLocation')
+    .then(res => res.json())
+    .then(locationName => this.setState({location_name: locationName}));
+  }
+/*
+  getLocationLat = () => {
+    fetch('api/displayLat')
+    .then(res => res.json())
+    .then(locationLat => this.setState({location_lat: locationLat}));
+  }
+
+  getLocationLng = () => {
+    fetch('api/displayLng')
+    .then(res => res.json())
+    .then(locationLng => this.setState({location_lng: locationLng}));
+  }*/
 
   addNameToList = () => {
     fetch(`/names/${this.state.newName}`)
@@ -28,24 +50,17 @@ class App extends Component {
     this.setState({newName: event.target.value})
   }
 
-
-
-
   render() {
     const { namesList } = this.state;
-    const location = {
-      lat: 33.8688,
-      lng: 151.2093
-    }
 
     return (
       <div className="App">
       {/* Render the names list if we have them */}
       {namesList.length ? (
 
-        <div class="container">
-          <div class="row">
-            <div class="col-md-6">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-6">
               <h1>Lunch?</h1>
               <h2>Here's who's coming:</h2>
               <ul className="namesList">
@@ -55,25 +70,25 @@ class App extends Component {
                   </li>
                 )}
               </ul>
-              <p>
+
                 <label>
                   Your name?  :
                   <input type="text" name="name" value={this.state.newName} onChange={this.handleChange.bind(this)}/>
                 </label>
-              </p>
+
               <button
                 className="more"
                 onClick={this.addNameToList}>
                 Add me!
               </button>
             </div>
-            <div class="col-md-6">
-              <SearchBar/>
-              <p>
-                <div class="padded-top">
-                <Map center={location} />
+            <div className="col-md-6">
+              <h2>Location:</h2>
+              <h2>{this.state.location_name}</h2>
+              <SearchBar getLocationFunc={this.getLocation} onSuggestSelect={this.getLocation}/>
+                <div className="padded-top">
+                <Map />
                 </div>
-              </p>
             </div>
           </div>
         </div>
@@ -81,12 +96,12 @@ class App extends Component {
           // Render a helpful message otherwise
           <div>
             <h1>No one coming yet :(</h1>
-            <p>
+
             <label>
               Your name?  :
               <input type="text" name="name" value={this.state.newName} onChange={this.handleChange.bind(this)}/>
             </label>
-            </p>
+
             <button
               className="more"
               onClick={this.addNameToList}>

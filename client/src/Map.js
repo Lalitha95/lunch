@@ -2,31 +2,36 @@ import React, { Component } from 'react'
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
-const MyMapComponent = compose(
-  withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyDwgyoaaQfSFQkDB5Tdp6Jcv7r3jR87u2Q",
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
-    mapElement: <div style={{ height: `100%` }} />,
-  }),
-  withScriptjs,
-  withGoogleMap
-  )((props) =>
-    <GoogleMap
-      defaultZoom={16}
-      defaultCenter={{ lat: -33.864179, lng: 151.21176 }}
-    >
-      {props.isMarkerShown && <Marker position={{ lat: -33.864179, lng: 151.21176 }} onClick={props.onMarkerClick} />}
-    </GoogleMap>
-  )
+var MyMapComponent = Component;
 
 class Map extends Component {
   state = {
-    isMarkerShown: false,
+    isMarkerShown: false
+  }
+
+  loadMapComponent = () => {
+    MyMapComponent = compose(
+      withProps({
+        googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyDwgyoaaQfSFQkDB5Tdp6Jcv7r3jR87u2Q",
+        loadingElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `400px` }} />,
+        mapElement: <div style={{ height: `100%` }} />,
+      }),
+      withScriptjs,
+      withGoogleMap
+      )((props) =>
+        <GoogleMap
+          defaultZoom={16}
+          defaultCenter={{ lat: this.props.centerLat, lng: this.props.centerLng }}
+        >
+          {props.isMarkerShown && <Marker position={{ lat: this.props.centerLat, lng: this.props.centerLng }} onClick={props.onMarkerClick} />}
+        </GoogleMap>
+      );
   }
 
   componentDidMount() {
-    this.delayedShowMarker()
+    this.loadMapComponent();
+    this.delayedShowMarker();
   }
 
   delayedShowMarker = () => {
@@ -41,26 +46,16 @@ class Map extends Component {
   }
 
   render() {
+    this.loadMapComponent();
     return (
-      <MyMapComponent
-        isMarkerShown={this.state.isMarkerShown}
-        onMarkerClick={this.handleMarkerClick}
-      />
+      <div>
+        <MyMapComponent
+          isMarkerShown={this.state.isMarkerShown}
+          onMarkerClick={this.handleMarkerClick}
+        />
+      </div>
     )
   }
 }
 
 export default Map
-
-
-/*
-<GoogleMapLoader
-  conatinerElement = {mapContainer}
-  googleMapElemt = {
-    <GoogleMap
-      defaultZoom = {15}
-      defaultCenter={this.props.center}
-      options={{streetViewControl: false, mapTypeControl: false}}>
-    </GoogleMap>
-  }/>
-*/

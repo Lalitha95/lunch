@@ -5,14 +5,13 @@ import SearchBar from './SearchBar'
 class App extends Component {
   // Initialize state
 
-  state = { namesList: [] , newName: '', location_name: '', location_lat: '', location_lng: ''}
+  state = { namesList: [] , newName: '', location_name: '', location_lat_lng: [ -33, 151]}
 
   // Fetch names list after first mount
   componentDidMount() {
     this.getNamesList();
     this.getLocation();
-    //this.getLocationLat();
-    //this.getLocationLng();
+    this.getLatLng();
   }
 
   getNamesList = () => {
@@ -27,18 +26,12 @@ class App extends Component {
     .then(res => res.json())
     .then(locationName => this.setState({location_name: locationName}));
   }
-/*
-  getLocationLat = () => {
-    fetch('api/displayLat')
-    .then(res => res.json())
-    .then(locationLat => this.setState({location_lat: locationLat}));
-  }
 
-  getLocationLng = () => {
-    fetch('api/displayLng')
+  getLatLng = () => {
+    fetch('api/displayLatLng')
     .then(res => res.json())
-    .then(locationLng => this.setState({location_lng: locationLng}));
-  }*/
+    .then(locationLatLng => this.setState({location_lat_lng: locationLatLng}));
+  }
 
   addNameToList = () => {
     fetch(`/names/${this.state.newName}`)
@@ -85,9 +78,11 @@ class App extends Component {
             <div className="col-md-6">
               <h2>Location:</h2>
               <h2>{this.state.location_name}</h2>
-              <SearchBar getLocationFunc={this.getLocation} onSuggestSelect={this.getLocation}/>
+              <h2>Lat Long:</h2>
+              <h2>Lat: {this.state.location_lat_lng[0]}  Long: {this.state.location_lat_lng[1]}</h2>
+              <SearchBar getLocationFunc={this.getLocation} onSuggestSelect={this.getLocation} getLatLngFunc={this.getLatLng}/>
                 <div className="padded-top">
-                <Map />
+                <Map centerLat={this.state.location_lat_lng[0]} centerLng={this.state.location_lat_lng[1]}/>
                 </div>
             </div>
           </div>

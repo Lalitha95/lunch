@@ -5,8 +5,7 @@ const bodyParser = require('body-parser');
 const app = express();
 var names = [];
 var location = 'No location yet :o';
-var locationLat = -33.8688;
-var locationLng = 151.2093;
+var locationLatLng = [-33, 151];
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,16 +25,10 @@ app.get('/api/displayLocation', (req, res) => {
   console.log(`Sent location`);
 });
 
-app.get('api/displayLat', (req, res) => {
+app.get('/api/displayLatLng', (req, res) => {
   // Return them as json
-  res.json('-33');
-  console.log(`Sent location lat coords`);
-});
-
-app.get('api/displayLng', (req, res) => {
-  // Return them as json
-  res.json('151');
-  console.log(`Sent location lng coords`);
+  res.json(locationLatLng);
+  console.log(`Sent location`);
 });
 
 app.get('/names/:name', (req, res) => {
@@ -48,11 +41,10 @@ app.get('/names/:name', (req, res) => {
 
 app.post('/api/newLocation', function (req, res) {
   location = req.body.label;
-  locationLatLng = req.body.location;
-  console.log(location);
+  locationLatLng[0] = req.body.location.lat;
+  locationLatLng[1] = req.body.location.lng;
   res.send('POST request to the homepage');
   console.log(`post received`);
-  //console.log(req.body);
 });
 
 // The "catchall" handler: for any request that doesn't

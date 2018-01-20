@@ -28,7 +28,7 @@ class SearchBar extends Component {
     }).then(res => {
         return res;
     }).then(this.props.getLocationFunc())
-    .catch(err => err);//.then(this.props.getLocationFunc())
+    .then(this.props.getLatLngFunc())
   }
 
   onSuggestNoResults(userInput) {

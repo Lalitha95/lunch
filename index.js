@@ -1,25 +1,68 @@
 const express = require('express');
 const path = require('path');
-const generatePassword = require('password-generator');
+const bodyParser = require('body-parser');
+const moment = require('moment');
 
 const app = express();
+var names = [];
+var location = 'No location yet :o';
+var locationLatLng = [-33.8688, 151.2093];
+var date = 'No date yet :(';
+
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Put all API endpoints under '/api'
-app.get('/api/passwords', (req, res) => {
-  const count = 5;
-
-  // Generate some passwords
-  const passwords = Array.from(Array(count).keys()).map(i =>
-    generatePassword(12, false)
-  )
-
+app.get('/api/displayNames', (req, res) => {
+  const namesList = Array.from(names);
   // Return them as json
-  res.json(passwords);
+  res.json(namesList);
+  console.log(`Sent names`);
+});
 
-  console.log(`Sent ${count} passwords`);
+app.get('/api/displayLocation', (req, res) => {
+  // Return them as json
+  res.json(location);
+  console.log(`Sent location`);
+});
+
+app.get('/api/displayLatLng', (req, res) => {
+  // Return them as json
+  res.json(locationLatLng);
+  console.log(`Sent latlng`);
+});
+
+app.get('/api/displayDate', (req, res) => {
+  // Return them as json
+  res.json(date);
+  console.log(`Sent date`);
+});
+
+app.get('/names/:name', (req, res) => {
+  console.log(req.params);
+  if(req.params.name){
+    names.push(req.params.name);
+  }
+  res.send('Name added.');
+});
+
+app.get('/date/:newDate', (req, res) => {
+  console.log(req.params);
+  if(req.params.newDate){
+    date = req.params.newDate;
+  }
+  res.send('date added.');
+});
+
+app.post('/api/newLocation', function (req, res) {
+  location = req.body.label;
+  locationLatLng[0] = req.body.location.lat;
+  locationLatLng[1] = req.body.location.lng;
+  res.send('POST request to the homepage');
+  console.log(`post received`);
 });
 
 // The "catchall" handler: for any request that doesn't

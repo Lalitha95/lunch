@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import DayPickerInput from "react-day-picker/DayPickerInput";
+import { formatDate } from 'react-day-picker/moment';
 import 'react-day-picker/lib/style.css';
 import './App.css';
-import Map from './Map'
-import SearchBar from './SearchBar'
+import Map from './Map';
+import SearchBar from './SearchBar';
+
 class App extends Component {
   // Initialize state
 
-  state = { namesList: [] , newName: '', location_name: '', location_lat_lng: [ -33, 151], date: undefined}
+  state = { namesList: [] , newName: '', location_name: '', location_lat_lng: [ -33, 151], date: ''}
 
   // Fetch names list after first mount
   componentDidMount() {
     this.getNamesList();
     this.getLocation();
     this.getLatLng();
+    this.getCurrDate();
   }
 
   getNamesList = () => {
@@ -35,6 +38,12 @@ class App extends Component {
     .then(locationLatLng => this.setState({location_lat_lng: locationLatLng}));
   }
 
+  getCurrDate = () => {
+    fetch('api/displayDate')
+    .then(res => res.json())
+    .then(Date_received => this.setState({date: Date_received}));
+  }
+
   addNameToList = () => {
     fetch(`/names/${this.state.newName}`)
     .then(this.getNamesList())
@@ -42,8 +51,10 @@ class App extends Component {
   }
 
   setDate = (newDate) => {
-    //this.setState({date: newDate});
-    console.log(newDate);
+
+    fetch(`/date/${formatDate(newDate, 'LLLL')}`)
+    .then(this.getCurrDate())
+    .then(this.setState({date: formatDate(newDate, 'LLLL')}));
   }
 
   handleChange(event) {
@@ -60,7 +71,7 @@ class App extends Component {
 
         <div className="container">
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-4">
               <h1>Lunch?</h1>
               <h2>Here's who's coming:</h2>
               <ul className="namesList">
@@ -70,30 +81,30 @@ class App extends Component {
                   </li>
                 )}
               </ul>
-
-                <label>
-                  Your name?  :
-                  <input type="text" name="name" value={this.state.newName} onChange={this.handleChange.bind(this)}/>
-                </label>
-
+              <label>
+                Your name?  :
+                <input type="text" name="name" value={this.state.newName} onChange={this.handleChange.bind(this)}/>
+              </label>
               <button
                 className="more"
                 onClick={this.addNameToList}>
                 Add me!
               </button>
             </div>
-            <div className="col-md-6">
-              <h2>Location:</h2>
-              <h2>{this.state.location_name}</h2>
+            <div className="col-md-4">
+              <h2>Where is it?</h2>
+              <h3>{this.state.location_name}</h3>
               <h2>Lat Long:</h2>
-              <h2>Lat: {this.state.location_lat_lng[0]}  Long: {this.state.location_lat_lng[1]}</h2>
+              <h3>Lat: {this.state.location_lat_lng[0]}  Long: {this.state.location_lat_lng[1]}</h3>
               <SearchBar getLocationFunc={this.getLocation} getLocationMapFunc={() => this.refs.locationMap.loadMapComponent()} getLatLngFunc={this.getLatLng}/>
-                <div className="padded-top">
-                <Map ref = "locationMap" centerLat={this.state.location_lat_lng[0]} centerLng={this.state.location_lat_lng[1]}/>
-                </div>
-                <h3>What day is lunch?</h3>
-                <DayPickerInput placeholder="DD/MM/YYYY" format="DD/MM/YYYY" onDayChange={day => this.setDate(day)}/>
-                {this.state.date}
+              <div className="padded-top">
+              <Map ref = "locationMap" centerLat={this.state.location_lat_lng[0]} centerLng={this.state.location_lat_lng[1]}/>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <h2>When is it?</h2>
+              <h3>{this.state.date}</h3>
+              <DayPickerInput placeholder="DD/MM/YYYY" format="DD/MM/YYYY" onDayChange={day => this.setDate(day)}/>
             </div>
           </div>
         </div>

@@ -6,13 +6,8 @@ const moment = require('moment');
 const app = express();
 var names = [];
 var location = 'No location yet :o';
-var locationLatLng = [-33, 151];
-var date = moment();
-
-
-var dateString = '';
-dateString = date.format('LLLL');
-console.log(dateString);
+var locationLatLng = [-33.8688, 151.2093];
+var date = 'No date yet :(';
 
 
 // Serve static files from the React app
@@ -37,7 +32,13 @@ app.get('/api/displayLocation', (req, res) => {
 app.get('/api/displayLatLng', (req, res) => {
   // Return them as json
   res.json(locationLatLng);
-  console.log(`Sent location`);
+  console.log(`Sent latlng`);
+});
+
+app.get('/api/displayDate', (req, res) => {
+  // Return them as json
+  res.json(date);
+  console.log(`Sent date`);
 });
 
 app.get('/names/:name', (req, res) => {
@@ -46,6 +47,14 @@ app.get('/names/:name', (req, res) => {
     names.push(req.params.name);
   }
   res.send('Name added.');
+});
+
+app.get('/date/:newDate', (req, res) => {
+  console.log(req.params);
+  if(req.params.newDate){
+    date = req.params.newDate;
+  }
+  res.send('date added.');
 });
 
 app.post('/api/newLocation', function (req, res) {

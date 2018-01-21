@@ -15,5 +15,7 @@ Key features:
 
 How:
   - Heroku Deployment
-  - Node/Express
+  - Node/Express Backend
+  - React Frontend
+  - Still have to decide database storage
  

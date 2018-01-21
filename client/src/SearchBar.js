@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Geosuggest from 'react-geosuggest';
-import './App.css';
+import 'react-geosuggest/module/geosuggest.css';
+//import './App.css';
 class SearchBar extends Component {
 
   onFocus() {

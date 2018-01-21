@@ -1,11 +1,20 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const moment = require('moment');
 
 const app = express();
 var names = [];
 var location = 'No location yet :o';
 var locationLatLng = [-33, 151];
+var date = moment();
+
+
+var dateString = '';
+dateString = date.format('LLLL');
+console.log(dateString);
+
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import DayPickerInput from "react-day-picker/DayPickerInput";
+import 'react-day-picker/lib/style.css';
 import './App.css';
 import Map from './Map'
 import SearchBar from './SearchBar'
 class App extends Component {
   // Initialize state
 
-  state = { namesList: [] , newName: '', location_name: '', location_lat_lng: [ -33, 151]}
+  state = { namesList: [] , newName: '', location_name: '', location_lat_lng: [ -33, 151], date: undefined}
 
   // Fetch names list after first mount
   componentDidMount() {
@@ -37,6 +39,11 @@ class App extends Component {
     fetch(`/names/${this.state.newName}`)
     .then(this.getNamesList())
     .then(this.setState({newName: ''}));
+  }
+
+  setDate = (newDate) => {
+    //this.setState({date: newDate});
+    console.log(newDate);
   }
 
   handleChange(event) {
@@ -84,6 +91,9 @@ class App extends Component {
                 <div className="padded-top">
                 <Map ref = "locationMap" centerLat={this.state.location_lat_lng[0]} centerLng={this.state.location_lat_lng[1]}/>
                 </div>
+                <h3>What day is lunch?</h3>
+                <DayPickerInput placeholder="DD/MM/YYYY" format="DD/MM/YYYY" onDayChange={day => this.setDate(day)}/>
+                {this.state.date}
             </div>
           </div>
         </div>

@@ -80,9 +80,9 @@ class App extends Component {
               <h2>{this.state.location_name}</h2>
               <h2>Lat Long:</h2>
               <h2>Lat: {this.state.location_lat_lng[0]}  Long: {this.state.location_lat_lng[1]}</h2>
-              <SearchBar getLocationFunc={this.getLocation} onSuggestSelect={this.getLocation} getLatLngFunc={this.getLatLng}/>
+              <SearchBar getLocationFunc={this.getLocation} getLocationMapFunc={() => this.refs.locationMap.loadMapComponent()} getLatLngFunc={this.getLatLng}/>
                 <div className="padded-top">
-                <Map centerLat={this.state.location_lat_lng[0]} centerLng={this.state.location_lat_lng[1]}/>
+                <Map ref = "locationMap" centerLat={this.state.location_lat_lng[0]} centerLng={this.state.location_lat_lng[1]}/>
                 </div>
             </div>
           </div>

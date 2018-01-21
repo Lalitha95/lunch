@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
@@ -30,8 +31,11 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    this.loadMapComponent();
     this.delayedShowMarker();
+  }
+
+  componentWillMount() {
+    this.loadMapComponent();
   }
 
   delayedShowMarker = () => {
@@ -46,7 +50,7 @@ class Map extends Component {
   }
 
   render() {
-    this.loadMapComponent();
+    //this.loadMapComponent();
     return (
       <div>
         <MyMapComponent

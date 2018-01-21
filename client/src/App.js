@@ -23,31 +23,36 @@ class App extends Component {
     // Get the names list and store them in state
     fetch('/api/displayNames')
     .then(res => res.json())
-    .then(namesList => this.setState({ namesList }));
+    .then(namesList => this.setState({ namesList }))
+    .then(this.render());
   }
 
   getLocation = () => {
     fetch('api/displayLocation')
     .then(res => res.json())
-    .then(locationName => this.setState({location_name: locationName}));
+    .then(locationName => this.setState({location_name: locationName}))
+    .then(this.render());;
   }
 
   getLatLng = () => {
     fetch('api/displayLatLng')
     .then(res => res.json())
-    .then(locationLatLng => this.setState({location_lat_lng: locationLatLng}));
+    .then(locationLatLng => this.setState({location_lat_lng: locationLatLng}))
+    .then(this.render());;
   }
 
   getCurrDate = () => {
     fetch('api/displayDate')
     .then(res => res.json())
-    .then(Date_received => this.setState({date: Date_received}));
+    .then(Date_received => this.setState({date: Date_received}))
+    .then(this.render());;
   }
 
   addNameToList = () => {
     fetch(`/names/${this.state.newName}`)
     .then(this.getNamesList())
-    .then(this.setState({newName: ''}));
+    .then(this.setState({newName: ''}))
+    .then(this.render());;
   }
 
   setDate = (newDate) => {
